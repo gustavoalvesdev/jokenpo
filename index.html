@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedra, Papel e Tesoura</title>
+    <style>
+		body {
+			background-color: #222;
+			color: white;
+		}
+        .align {
+            display: flex;
+        }
+        .player-options,
+        .enemy-options {
+            width: 50%;
+        }
+        .player-options img,
+        .enemy-options img {
+            max-width: 100px;
+            opacity: 0.3;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    
+    <h1 style="text-align: center" id="won">Pedra, papel ou tesoura!</h1>
+    <h2 style="text-align: center">Seus Pontos: <span id="playerPoints">0</span></h2>
+    <h2 style="text-align: center">Pontos do Computador: <span id="enemyPoints">0</span></h2>
+    <hr>
+
+    <div class="align">
+        <div class="player-options">
+            <div><img opt="rock" src="rock.png" alt=""></div>
+            <div><img opt="paper" src="paper.png" alt=""></div>
+            <div><img opt="scissor" src="scisor.png" alt=""></div>
+        </div>
+        <!-- player-options -->
+    
+        <div class="enemy-options">
+            <div><img opt="rock" src="rock.png" alt=""></div>
+            <div><img opt="paper" src="paper.png" alt=""></div>
+            <div><img opt="scissor" src="scisor.png" alt=""></div>
+        </div>
+        <!-- player-options -->
+    </div>
+    <!-- align -->
+
+    <script>
+
+        const elements = document.querySelectorAll('.player-options div img');
+
+        let playerOpt = '';
+
+        let enemyOpt = '';
+
+        const enemyOptions = document.querySelectorAll('.enemy-options div');
+
+        let playerPoints = 0;
+        let enemyPoints = 0;
+
+        const playerPointsSpan = document.getElementById("playerPoints");
+        const enemyPointsSpan = document.getElementById("enemyPoints");
+
+        const updatePoints = () => {
+            playerPointsSpan.innerHTML = playerPoints;
+            enemyPointsSpan.innerHTML = enemyPoints;
+        }
+
+        const validateVictory = () => {
+				
+			let whoWon = document.getElementById("won");
+				
+            if (playerOpt == 'rock') {
+                if (enemyOpt == 'rock') {
+                    whoWon.innerHTML = 'Empate';
+                } else if (enemyOpt == 'paper') {
+                    enemyPoints += 1;
+                    whoWon.innerHTML = 'Computador Ganhou!';
+                    updatePoints();
+                } else if(enemyOpt == 'scissor') {
+                    playerPoints += 1;
+                    whoWon.innerHTML = 'Você Ganhou!';
+                    updatePoints();
+                }
+            }
+
+            if (playerOpt == 'paper') {
+                if (enemyOpt == 'rock') {
+                    playerPoints += 1;
+                    whoWon.innerHTML = 'Você Ganhou!';
+                    updatePoints();
+                } else if (enemyOpt == 'paper') {
+                    whoWon.innerHTML = 'Empate';
+                } else if (enemyOpt == 'scissor') {
+                    enemyPoints += 1;
+                    whoWon.innerHTML = 'Computador Ganhou!';
+                    updatePoints();
+                } 
+            }
+
+            if (playerOpt == 'scissor') {
+                if (enemyOpt == 'rock') {
+                    enemyPoints += 1;
+                    whoWon.innerHTML = 'Computador Ganhou!';
+                    updatePoints();
+                } else if (enemyOpt == 'paper') {
+                    playerPoints += 1;
+                    whoWon.innerHTML = 'Você Ganhou!';
+                    updatePoints();
+                } else if (enemyOpt == 'scissor') {
+                    whoWon.innerHTML = 'Empate';
+                } 
+            }
+
+            
+        }
+
+
+        const resetEnemyOptions = () => {
+            for (let i = 0; i < enemyOptions.length; i++) {
+       
+                enemyOptions[i].childNodes[0].style.opacity = 0.1;
+              
+            }
+        }
+
+        
+        const enemyPlay = () => {
+            let rand = Math.floor(Math.random() * 3);
+            
+            resetEnemyOptions();
+
+            for (let i = 0; i < enemyOptions.length; i++) {
+                if (i == rand) {
+                    enemyOptions[i].childNodes[0].style.opacity = 1;
+                    enemyOpt = enemyOptions[i].childNodes[0].getAttribute('opt');
+                }
+            }
+
+            validateVictory();
+        }
+
+        const resetPlayerOpacity = () => {
+
+            for (let i  = 0; i < elements.length; i++) {
+
+                elements[i].style.opacity = 0.1;
+
+            }
+        }
+
+        for (let i  = 0; i < elements.length; i++) {
+
+
+            elements[i].addEventListener('click', el => {
+                resetPlayerOpacity();
+                el.target.style.opacity = 1;
+                playerOpt = el.target.getAttribute('opt');
+
+                enemyPlay();
+            });
+
+        }
+
+    </script>
+    
+</body>
+</html>
